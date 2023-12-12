@@ -1,0 +1,6 @@
+from flask import Request
+from flask_restful import Resource
+
+class MovieUserResource(Resource) :
+    def get(self) :
+        return
