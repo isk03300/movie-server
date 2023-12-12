@@ -1,0 +1,7 @@
+from flask import Request
+from flask_restful import Resource
+from mysql.connector import Error
+
+class MovieListResource(Resource) :
+    def get(self) :
+        return
