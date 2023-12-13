@@ -214,3 +214,4 @@ class MyReviewResource(Resource) :
         return {'result' : 'success',
                 'review' : relust_list,
                 'count' : len(relust_list)},200
+    
