@@ -125,6 +125,10 @@ class ReviewSource(Resource) :
                 'review' : relust_list,
                 'count' : len(relust_list)},200
     
+
+
+
+
 class MyReviewResource(Resource) :
     @jwt_required()
     def post(self) :
@@ -168,3 +172,45 @@ class MyReviewResource(Resource) :
 
 
         return {'result' : 'success'},200
+
+    @jwt_required(optional=True)
+    def get(self) :
+        movieId = request.args.get('movieId')
+        offset = request.args.get('offset')
+        limit = request.args.get('limit')
+
+        try :
+            connection = get_connection()
+            query = '''select r.id , u.nickname, u.gender, r.rating
+                            from review r
+                            join user u
+                            on r.userId = u.id
+                            where r.movieId = %s
+                            order by r.createdAt desc
+                            limit '''+str(offset) +''','''+str(limit) +''';'''
+            
+            record = (movieId, )
+
+            cursor = connection.cursor(dictionary=True)
+
+            cursor.execute(query,record)
+
+            relust_list = cursor.fetchall()
+
+            print()
+            print(relust_list)
+
+            cursor.close()
+            connection.close()
+
+
+        except Error as e:
+            print(e)
+            cursor.close()
+            connection.close()
+            return {'error' : str(e)} , 400
+        
+
+        return {'result' : 'success',
+                'review' : relust_list,
+                'count' : len(relust_list)},200
